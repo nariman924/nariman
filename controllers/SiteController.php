@@ -2,26 +2,27 @@
 
 namespace app\controllers;
 
-use app\models\XmlFile;
 use Yii;
+use app\models\XmlFile;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
+use app\models\XmlFileTag;
+use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
-    public function actions()
+    public function behaviors()
     {
         return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post'],
+                ],
             ],
         ];
     }
-
     /**
      * Displays homepage.
      *
@@ -30,7 +31,6 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $model = new XmlFile();
-        $dataProvider = XmlFile::search();
 
         if (Yii::$app->request->isPost) {
             $model->uploadedFile = UploadedFile::getInstance($model, 'uploadedFile');
@@ -40,7 +40,10 @@ class SiteController extends Controller
             }
         }
 
-        return $this->render('index', compact('model', 'dataProvider'));
+        $dataProvider = XmlFile::getDataProvider();
+        $filesCount = XmlFileTag::fileCountOver20Tags();
+
+        return $this->render('index', compact('model', 'dataProvider', 'filesCount'));
     }
 
     /**
@@ -53,6 +56,14 @@ class SiteController extends Controller
         $model = $this->findModel($id);
 
         return $this->render('info', compact('model'));
+    }
+
+    public function actionDelete($id)
+    {
+        $model = $this->findModel($id);
+        $model->delete();
+
+        return $this->redirect('index');
     }
 
     protected function findModel($id)

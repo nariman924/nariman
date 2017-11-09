@@ -49,8 +49,14 @@ class XmlFile extends \yii\db\ActiveRecord
             $this->name = $this->uploadedFile->baseName . '.' . $this->uploadedFile->extension;
             $this->upload_at = date('Y-m-d H:i:s');
 
-            $tagsFactory = new XmlFileTagFactory($this->uploadedFile->tempName);
-            $xmlFileTags = $tagsFactory->getModels();
+            try {
+                $tagsFactory = new XmlFileTagFactory($this->uploadedFile->tempName);
+                $xmlFileTags = $tagsFactory->getModels();
+            } catch (\Exception $e) {
+                $this->addError('uploadedFile', Yii::t('app', 'An error occurred while parse the file'));
+
+                return false;
+            }
 
             $transaction = Yii::$app->db->beginTransaction();
 
@@ -65,9 +71,9 @@ class XmlFile extends \yii\db\ActiveRecord
             } catch (\Exception $e) {
                 $transaction->rollBack();
                 $this->addError('uploadedFile', Yii::t('app', 'An error occurred while saving the file'));
-                throw $e;
+
+                return false;
             }
-            unlink($this->uploadedFile->tempName);
 
             return true;
         } else {
@@ -96,7 +102,18 @@ class XmlFile extends \yii\db\ActiveRecord
         return $this->hasMany(XmlFileTag::className(), ['file_id' => 'id']);
     }
 
-    public static function search()
+    /**
+     * @return array
+     */
+    public function getTagsForView()
+    {
+        return $this->getXmlFileTags()
+            ->select(['tag_name', 'entries'])
+            ->orderBy(['tag_name' => SORT_ASC])
+            ->all();
+    }
+
+    public static function getDataProvider()
     {
         $query = XmlFile::find();
 

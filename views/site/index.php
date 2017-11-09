@@ -1,9 +1,10 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\XmlFile */
+/* @var $dataProvider */
+/* @var $filesCount integer*/
 
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -33,9 +34,18 @@ $this->title = Yii::t('app', 'Test task');
                      'value' => function ($model) {
                            return Html::a($model->name, ['info', 'id' => $model->id]);
                      },
+                ],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'contentOptions' => ['style' => 'width:60px;'],
+                    'header'=>false,
+                    'template' => '{delete}',
                 ]
-
             ],
         ]); ?>
+
+        <div>
+            <p><?= Yii::t('app', 'Count of files having over 20 unique tags entries: {n}', ['n' => $filesCount])?></p>
+        </div>
     <?php Pjax::end() ?>
 </div>

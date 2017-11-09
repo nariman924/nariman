@@ -1,15 +1,16 @@
 <?php
     use yii\bootstrap\ActiveForm;
     use yii\bootstrap\Html;
-use yii\widgets\Pjax;
+    use yii\widgets\Pjax;
+/* @var $model \app\models\XmlFile */
 
 $this->registerJs(
-        '$("document").ready(function(){
-                $("#new-file").on("pjax:end", function() {
-                $.pjax.reload({container:"#file-list"});
-            });
-        });'
-    );
+    '$("document").ready(function(){
+        $("#new-file").on("pjax:end", function() {
+            $.pjax.reload({container:"#file-list"});
+        });
+    });'
+);
 ?>
 
 <div class="row">

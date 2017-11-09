@@ -2,9 +2,8 @@
 
 namespace app\models;
 
-use DOMDocument;
-use DOMXPath;
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "xml_file_tags".
@@ -58,5 +57,15 @@ class XmlFileTag extends \yii\db\ActiveRecord
     public function getFile()
     {
         return $this->hasOne(XmlFile::className(), ['id' => 'file_id']);
+    }
+
+    public static function fileCountOver20Tags()
+    {
+        return (new Query())
+            ->select(['c' => 'COUNT(id)'])
+            ->from(self::tableName())
+            ->groupBy('file_id')
+            ->having(['>', 'c', 20])
+            ->count('c');
     }
 }
