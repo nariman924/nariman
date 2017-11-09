@@ -10,7 +10,7 @@ class m171109_094840_create_file_table extends Migration
     /**
      * @inheritdoc
      */
-    public function up()
+    public function saveUp()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -27,16 +27,24 @@ class m171109_094840_create_file_table extends Migration
             'id' => $this->primaryKey(),
             'file_id' => $this->integer(),
             'tag_name' => $this->string(200),
-            'entries' => $this->timestamp()->notNull()->defaultExpression('CURRENT_TIMESTAMP')
+            'entries' => $this->integer(),
         ], $tableOptions);
 
-        $this->addForeignKey('fk_file_tags', 'xml_file_tags', 'file_id', 'xml_file', 'id');
+        $this->addForeignKey(
+            'fk_file_tags',
+            'xml_file_tags',
+            'file_id',
+            'xml_file',
+            'id',
+            'CASCADE',
+            'CASCADE'
+        );
     }
 
     /**
      * @inheritdoc
      */
-    public function down()
+    public function saveDown()
     {
         $this->dropForeignKey('fk_file_tags', 'xml_file_tags');
         $this->dropTable('xml_file_tags');

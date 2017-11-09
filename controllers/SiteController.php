@@ -30,7 +30,6 @@ class SiteController extends Controller
     public function actionIndex()
     {
         $model = new XmlFile();
-
         $dataProvider = XmlFile::search();
 
         if (Yii::$app->request->isPost) {

@@ -3,8 +3,9 @@
 namespace app\models;
 
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
+use yii\data\ActiveDataProvider;
+use app\components\XmlFileTagFactory;
 
 /**
  * This is the model class for table "xml_file".
@@ -48,7 +49,27 @@ class XmlFile extends \yii\db\ActiveRecord
             $this->name = $this->uploadedFile->baseName . '.' . $this->uploadedFile->extension;
             $this->upload_at = date('Y-m-d H:i:s');
 
-            return $this->save();
+            $tagsFactory = new XmlFileTagFactory($this->uploadedFile->tempName);
+            $xmlFileTags = $tagsFactory->getModels();
+
+            $transaction = Yii::$app->db->beginTransaction();
+
+            try {
+                $this->save();
+
+                foreach ($xmlFileTags as $xmlFileTag) {
+                    $this->link('xmlFileTags', $xmlFileTag);
+                }
+
+                $transaction->commit();
+            } catch (\Exception $e) {
+                $transaction->rollBack();
+                $this->addError('uploadedFile', Yii::t('app', 'An error occurred while saving the file'));
+                throw $e;
+            }
+            unlink($this->uploadedFile->tempName);
+
+            return true;
         } else {
             return false;
         }

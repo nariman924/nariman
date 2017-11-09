@@ -2,6 +2,8 @@
 
 namespace app\models;
 
+use DOMDocument;
+use DOMXPath;
 use Yii;
 
 /**

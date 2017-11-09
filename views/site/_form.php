@@ -15,12 +15,12 @@ $this->registerJs(
 <div class="row">
     <div class="col-lg-6">
     <?php Pjax::begin(['id' => 'new-file']) ?>
-        <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+        <?php $form = ActiveForm::begin() ?>
 
         <?= $form->field($model, 'uploadedFile')->fileInput() ?>
 
         <div class="form-group">
-            <?= Html::submitButton(Yii::t('app','Submit'), ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
+            <?= Html::submitButton(Yii::t('app','Submit'), ['class' => 'btn btn-primary', 'name' => 'button']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
