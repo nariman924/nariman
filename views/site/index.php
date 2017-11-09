@@ -46,6 +46,7 @@ $this->title = Yii::t('app', 'Test task');
 
         <div>
             <p><?= Yii::t('app', 'Count of files having over 20 unique tags entries: {n}', ['n' => $filesCount])?></p>
+            <p><?= Yii::t('app', 'Count of files having over 20 all tags entries: {n}', ['n' => $filesCountAll])?></p>
         </div>
     <?php Pjax::end() ?>
 </div>

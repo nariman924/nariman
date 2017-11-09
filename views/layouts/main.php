@@ -4,6 +4,7 @@
 /* @var $content string */
 
 use app\widgets\Alert;
+use lajax\languagepicker\widgets\LanguagePicker;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
@@ -27,6 +28,26 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 
 <div class="wrap">
+    <?php
+    NavBar::begin([
+        'brandLabel' => $this->title,
+        'brandUrl' => Yii::$app->homeUrl,
+        'options' => [
+            'class' => 'navbar-inverse navbar-fixed-top',
+        ],
+    ]);
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav navbar-right'],
+    ]); ?>
+
+    <div class="navbar-text pull-right">
+        <?= LanguagePicker::widget([
+            'skin' => LanguagePicker::SKIN_DROPDOWN,
+            'size' => LanguagePicker::SIZE_LARGE
+        ]); ?>
+    </div>
+    <?php NavBar::end();?>
+
     <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

@@ -23,6 +23,15 @@ class SiteController extends Controller
             ],
         ];
     }
+
+    public function beforeAction($action)
+    {
+        $language = Yii::$app->request->cookies->getValue('language', 'ru');
+        Yii::$app->language = $language;
+
+        return parent::beforeAction($action);
+    }
+
     /**
      * Displays homepage.
      *
@@ -42,8 +51,9 @@ class SiteController extends Controller
 
         $dataProvider = XmlFile::getDataProvider();
         $filesCount = XmlFileTag::fileCountOver20Tags();
+        $filesCountAll = XmlFileTag::fileCountOver20AllTags();
 
-        return $this->render('index', compact('model', 'dataProvider', 'filesCount'));
+        return $this->render('index', compact('model', 'dataProvider', 'filesCount', 'filesCountAll'));
     }
 
     /**

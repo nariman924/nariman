@@ -10,7 +10,7 @@ class m171109_094840_create_file_table extends Migration
     /**
      * @inheritdoc
      */
-    public function saveUp()
+    public function up()
     {
         $tableOptions = null;
         if ($this->db->driverName === 'mysql') {
@@ -44,7 +44,7 @@ class m171109_094840_create_file_table extends Migration
     /**
      * @inheritdoc
      */
-    public function saveDown()
+    public function down()
     {
         $this->dropForeignKey('fk_file_tags', 'xml_file_tags');
         $this->dropTable('xml_file_tags');

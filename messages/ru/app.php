@@ -13,4 +13,5 @@ return [
     'An error occurred while saving the file' => 'Возникла ошибка при сохранении файла',
     'An error occurred while parse the file' => 'Возникла ошибка при разборе файла',
     'Count of files having over 20 unique tags entries: {n}' => 'Количество файлов имеющих более 20 уникальных тегов: {n}',
+    'Count of files having over 20 all tags entries: {n}' => 'Количество файлов имеющих более 20 вхождений всех тегов в сумме: {n}',
 ];

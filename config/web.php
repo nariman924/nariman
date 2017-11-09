@@ -23,6 +23,10 @@ $config = [
                 ],
             ],
         ],
+        'languagepicker' => [
+            'class' => 'lajax\languagepicker\Component',
+            'languages' => ['en', 'ru']
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => '2YHU8sO_aNGDuf4tqRx3tYjqcfTtwKea',

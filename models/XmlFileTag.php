@@ -68,4 +68,14 @@ class XmlFileTag extends \yii\db\ActiveRecord
             ->having(['>', 'c', 20])
             ->count('c');
     }
+
+    public static function fileCountOver20AllTags()
+    {
+        return (new Query())
+            ->select(['s' => 'SUM(entries)'])
+            ->from(self::tableName())
+            ->groupBy('file_id')
+            ->having(['>', 's', 20])
+            ->count('s');
+    }
 }
