@@ -5,8 +5,9 @@
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\XmlFile */
 
+use yii\grid\GridView;
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use yii\widgets\Pjax;
 
 $this->title = Yii::t('app', 'Test task');
 ?>
@@ -14,28 +15,27 @@ $this->title = Yii::t('app', 'Test task');
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?php if (Yii::$app->session->hasFlash('formSubmitted')): ?>
-
         <div class="alert alert-success">
             <?= Yii::t('app', 'Upload success!') ?>
         </div>
-
-    <?php else: ?>
-
-        <div class="row">
-            <div class="col-lg-5">
-
-                <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-
-                <?= $form->field($model, 'uploadedFile')->fileInput() ?>
-
-                <div class="form-group">
-                    <?= Html::submitButton(Yii::t('app','Submit'), ['class' => 'btn btn-primary', 'name' => 'contact-button']) ?>
-                </div>
-
-                <?php ActiveForm::end(); ?>
-
-            </div>
-        </div>
-
     <?php endif; ?>
+    <?= $this->render('_form', compact('model')) ?>
+
+    <?php Pjax::begin(['id' => 'file-list']) ?>
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+                'upload_at:datetime',
+                [
+                     'attribute' => 'name',
+                     'format' => 'raw',
+                     'value' => function ($model) {
+                           return Html::a($model->name, ['info', 'id' => $model->id]);
+                     },
+                ]
+
+            ],
+        ]); ?>
+    <?php Pjax::end() ?>
 </div>

@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\UploadedFile;
 
 /**
@@ -44,9 +45,10 @@ class XmlFile extends \yii\db\ActiveRecord
     public function upload()
     {
         if ($this->validate()) {
-            $this->uploadedFile->saveAs(Yii::getAlias('@uploads/') . $this->uploadedFile->baseName . '.' . $this->uploadedFile->extension);
+            $this->name = $this->uploadedFile->baseName . '.' . $this->uploadedFile->extension;
+            $this->upload_at = date('Y-m-d H:i:s');
 
-            return true;
+            return $this->save();
         } else {
             return false;
         }
@@ -71,5 +73,16 @@ class XmlFile extends \yii\db\ActiveRecord
     public function getXmlFileTags()
     {
         return $this->hasMany(XmlFileTag::className(), ['file_id' => 'id']);
+    }
+
+    public static function search()
+    {
+        $query = XmlFile::find();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        return $dataProvider;
     }
 }

@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\XmlFile;
 use Yii;
 use yii\web\Controller;
+use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 
 class SiteController extends Controller
@@ -30,17 +31,17 @@ class SiteController extends Controller
     {
         $model = new XmlFile();
 
+        $dataProvider = XmlFile::search();
+
         if (Yii::$app->request->isPost) {
             $model->uploadedFile = UploadedFile::getInstance($model, 'uploadedFile');
 
             if ($model->upload()) {
-                Yii::$app->session->setFlash('formSubmitted');
-
-                return $this->refresh();
+                $model = new XmlFile();
             }
         }
 
-        return $this->render('index', compact('model'));
+        return $this->render('index', compact('model', 'dataProvider'));
     }
 
     /**
@@ -48,8 +49,20 @@ class SiteController extends Controller
      *
      * @return string
      */
-    public function actionAbout()
+    public function actionInfo($id)
     {
-        return $this->render('about');
+        $model = $this->findModel($id);
+
+        return $this->render('info', compact('model'));
+    }
+
+    protected function findModel($id)
+    {
+        if (($model = XmlFile::findOne($id)) !== null) {
+
+            return $model;
+        } else {
+            throw new NotFoundHttpException(Yii::t('yii', 'Page not found.'));
+        }
     }
 }
