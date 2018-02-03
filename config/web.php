@@ -5,6 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'defaultRoute' => 'car',
     'basePath' => dirname(__DIR__),
     'language' => 'ru-RU',
     'bootstrap' => ['log'],
@@ -62,6 +63,10 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '<controller:(car)>/<id:\d+>/<action:(update|delete|view)>' => '<controller>/<action>',
+                '<controller:(car)>/<action:(create)>' => '<controller>/<action>',
+                'car' => 'car/index',
+                'car/<slug:[a-zA-Z0-9_ -]+>' => 'car/view',
             ],
         ],
     ],
